@@ -10,7 +10,10 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
@@ -86,6 +89,7 @@ public class GUI extends javax.swing.JFrame {
         searchButton = new javax.swing.JButton();
         searchBar = new javax.swing.JTextField();
         resetButton = new javax.swing.JButton();
+        loadButton = new javax.swing.JButton();
         jTabbedPane3 = new javax.swing.JTabbedPane();
         jTabbedPane4 = new javax.swing.JTabbedPane();
 
@@ -169,13 +173,20 @@ public class GUI extends javax.swing.JFrame {
             }
         });
 
+        loadButton.setText("Load In");
+        loadButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                loadButtonActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addGap(23, 23, 23)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addComponent(jLabel2)
@@ -195,7 +206,8 @@ public class GUI extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 94, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 94, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(loadButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addGap(52, 52, 52)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel2Layout.createSequentialGroup()
@@ -244,7 +256,9 @@ public class GUI extends javax.swing.JFrame {
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jButton1)
                             .addComponent(jButton2)
-                            .addComponent(jButton3)))
+                            .addComponent(jButton3))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(loadButton))
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 415, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(resetButton, javax.swing.GroupLayout.PREFERRED_SIZE, 25, Short.MAX_VALUE)
@@ -397,6 +411,39 @@ public class GUI extends javax.swing.JFrame {
         reloadTable();
     }//GEN-LAST:event_resetButtonActionPerformed
 
+    private void loadButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_loadButtonActionPerformed
+        // LOAD IN BUTTON
+        try {
+            int pk = Integer.parseInt(studnr.getText());
+            String loadInQuery = "SELECT stud_nr AS 'Stud. Nr.', f_name AS 'Voornaam', l_name AS 'Achternaam', cohort as 'Cohort', studie_richting AS 'Studie Richting' FROM studenten WHERE stud_nr=?";
+            con = DriverManager.getConnection("jdbc:mysql://localhost/java", "root", "tokina01");
+            pst = con.prepareStatement(loadInQuery);
+            pst.setInt(1, pk);
+            rs = pst.executeQuery();
+            ResultSetMetaData rsmd = rs.getMetaData();
+            int columnCount = rsmd.getColumnCount();
+//            System.out.println(columnCount);
+            ArrayList<String> recordList = new ArrayList<>(columnCount);
+            while (rs.next()){
+                int i = 1;
+                while (i <= columnCount){
+                    recordList.add(rs.getString(i++));
+                }
+            }
+            fname.setText(recordList.get(1));
+            lname.setText(recordList.get(2));
+            cohort.setText(recordList.get(3));
+            studierichting.setText(recordList.get(4));
+//            System.out.println(recordList.get(0));
+//            System.out.println(recordList.get(1));
+//            System.out.println(recordList.get(2));
+//            System.out.println(recordList.get(3));
+//            System.out.println(recordList.get(4));
+        }catch (Exception e){
+            JOptionPane.showMessageDialog(null, e);
+        }
+    }//GEN-LAST:event_loadButtonActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -451,6 +498,7 @@ public class GUI extends javax.swing.JFrame {
     private javax.swing.JTabbedPane jTabbedPane4;
     private javax.swing.JTable jTable1;
     private javax.swing.JTextField lname;
+    private javax.swing.JButton loadButton;
     private javax.swing.JButton resetButton;
     private javax.swing.JTextField searchBar;
     private javax.swing.JButton searchButton;
