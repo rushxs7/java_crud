@@ -33,6 +33,7 @@ public class GUI extends javax.swing.JFrame {
     public GUI() {
         initComponents();
         reloadTable();
+        reloadModulesTable();
     }
     
     
@@ -56,11 +57,16 @@ public class GUI extends javax.swing.JFrame {
         }
     }
     
-    public void mouseClicked(MouseEvent e) {
-        if (e.getClickCount() == 1) {
-           JTable target = (JTable)e.getSource();
-           int row = target.getSelectedRow();
-           System.out.println(row);
+    public void reloadModulesTable() {
+        try{
+            con = DriverManager.getConnection("jdbc:mysql://localhost/java", "root", "tokina01");
+            String sql = "SELECT module_code AS 'Module Code', module_name AS 'Module Name' FROM modules;";
+            pst = con.prepareStatement(sql);
+            rs = pst.executeQuery();
+            jTable2.setModel(DbUtils.resultSetToTableModel(rs));
+            jTable2.setEnabled(false);
+        }catch (Exception ex){
+            JOptionPane.showMessageDialog(null, ex);
         }
     }
     
@@ -90,8 +96,22 @@ public class GUI extends javax.swing.JFrame {
         searchBar = new javax.swing.JTextField();
         resetButton = new javax.swing.JButton();
         loadButton = new javax.swing.JButton();
-        jTabbedPane3 = new javax.swing.JTabbedPane();
-        jTabbedPane4 = new javax.swing.JTabbedPane();
+        jPanel3 = new javax.swing.JPanel();
+        modulesTable = new javax.swing.JScrollPane();
+        jTable2 = new javax.swing.JTable();
+        moduleCodeField = new javax.swing.JTextField();
+        moduleNameField = new javax.swing.JTextField();
+        jLabel6 = new javax.swing.JLabel();
+        jLabel7 = new javax.swing.JLabel();
+        createModuleButton = new javax.swing.JButton();
+        updateModuleButton = new javax.swing.JButton();
+        deleteModuleButton = new javax.swing.JButton();
+        moduleSearchButton = new javax.swing.JButton();
+        moduleSearch = new javax.swing.JTextField();
+        moduleResetButton = new javax.swing.JButton();
+        jPanel4 = new javax.swing.JPanel();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        jTable3 = new javax.swing.JTable();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setPreferredSize(new java.awt.Dimension(1000, 650));
@@ -266,8 +286,141 @@ public class GUI extends javax.swing.JFrame {
         );
 
         jTabbedPane2.addTab("Studenten", jPanel2);
-        jTabbedPane2.addTab("Cohort", jTabbedPane3);
-        jTabbedPane2.addTab("Presentie", jTabbedPane4);
+
+        jTable2.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+
+            },
+            new String [] {
+                "Module Code", "Module"
+            }
+        ));
+        modulesTable.setViewportView(jTable2);
+
+        jLabel6.setText("Module Code:");
+
+        jLabel7.setText("Module Name:");
+
+        createModuleButton.setText("Create");
+        createModuleButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                createModuleButtonActionPerformed(evt);
+            }
+        });
+
+        updateModuleButton.setText("Update");
+
+        deleteModuleButton.setText("Delete");
+
+        moduleSearchButton.setText("Search");
+
+        moduleResetButton.setText("Reset");
+        moduleResetButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                moduleResetButtonActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
+        jPanel3.setLayout(jPanel3Layout);
+        jPanel3Layout.setHorizontalGroup(
+            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel3Layout.createSequentialGroup()
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(jPanel3Layout.createSequentialGroup()
+                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addGroup(jPanel3Layout.createSequentialGroup()
+                                .addContainerGap()
+                                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addComponent(jLabel6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(jLabel7, javax.swing.GroupLayout.DEFAULT_SIZE, 102, Short.MAX_VALUE)))
+                            .addComponent(createModuleButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addGroup(jPanel3Layout.createSequentialGroup()
+                                .addComponent(updateModuleButton, javax.swing.GroupLayout.DEFAULT_SIZE, 83, Short.MAX_VALUE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(deleteModuleButton, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(moduleNameField)
+                            .addComponent(moduleCodeField)))
+                    .addComponent(moduleResetButton, javax.swing.GroupLayout.PREFERRED_SIZE, 92, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(modulesTable, javax.swing.GroupLayout.DEFAULT_SIZE, 425, Short.MAX_VALUE)
+                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel3Layout.createSequentialGroup()
+                        .addComponent(moduleSearch)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(moduleSearchButton, javax.swing.GroupLayout.PREFERRED_SIZE, 89, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap())
+        );
+        jPanel3Layout.setVerticalGroup(
+            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel3Layout.createSequentialGroup()
+                .addGap(32, 32, 32)
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(moduleCodeField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel6)
+                    .addComponent(moduleSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(moduleSearchButton, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel3Layout.createSequentialGroup()
+                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(moduleNameField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel7))
+                        .addGap(18, 18, 18)
+                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(createModuleButton)
+                            .addComponent(updateModuleButton)
+                            .addComponent(deleteModuleButton))
+                        .addGap(18, 18, 18)
+                        .addComponent(moduleResetButton)
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addComponent(modulesTable, javax.swing.GroupLayout.DEFAULT_SIZE, 475, Short.MAX_VALUE))
+                .addContainerGap())
+        );
+
+        jTabbedPane2.addTab("Modules", jPanel3);
+
+        jTable3.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "1", "Title 2", "Title 3", "Title 4"
+            }
+        ) {
+            Class[] types = new Class [] {
+                java.lang.Boolean.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class
+            };
+
+            public Class getColumnClass(int columnIndex) {
+                return types [columnIndex];
+            }
+        });
+        jScrollPane2.setViewportView(jTable3);
+
+        javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
+        jPanel4.setLayout(jPanel4Layout);
+        jPanel4Layout.setHorizontalGroup(
+            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel4Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(322, Short.MAX_VALUE))
+        );
+        jPanel4Layout.setVerticalGroup(
+            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel4Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(115, Short.MAX_VALUE))
+        );
+
+        jTabbedPane2.addTab("Presentie", jPanel4);
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -434,15 +587,37 @@ public class GUI extends javax.swing.JFrame {
             lname.setText(recordList.get(2));
             cohort.setText(recordList.get(3));
             studierichting.setText(recordList.get(4));
-//            System.out.println(recordList.get(0));
-//            System.out.println(recordList.get(1));
-//            System.out.println(recordList.get(2));
-//            System.out.println(recordList.get(3));
-//            System.out.println(recordList.get(4));
         }catch (Exception e){
             JOptionPane.showMessageDialog(null, e);
         }
     }//GEN-LAST:event_loadButtonActionPerformed
+
+    private void moduleResetButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_moduleResetButtonActionPerformed
+        reloadModulesTable();
+        moduleCodeField.setText(null);
+        moduleNameField.setText(null);
+        moduleSearch.setText(null);
+    }//GEN-LAST:event_moduleResetButtonActionPerformed
+
+    private void createModuleButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_createModuleButtonActionPerformed
+        // CREATE MODULE BUTTON
+        try{
+        String sql = "INSERT INTO `modules`"
+                +"(module_code, module_name) "
+                +"VALUES (?,?)";
+        con = DriverManager.getConnection("jdbc:mysql://localhost/java", "root", "tokina01");
+        pst = con.prepareStatement(sql);
+        pst.setString(1, moduleCodeField.getText());
+        pst.setString(2, moduleCodeField.getText());
+        pst.executeUpdate();
+        JOptionPane.showMessageDialog(null, "Success!");
+        moduleCodeField.setText(null);
+        moduleNameField.setText(null);
+        reloadModulesTable();
+        }catch(Exception e){
+        JOptionPane.showMessageDialog(null, e);
+        }
+    }//GEN-LAST:event_createModuleButtonActionPerformed
 
     /**
      * @param args the command line arguments
@@ -481,6 +656,8 @@ public class GUI extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTextField cohort;
+    private javax.swing.JButton createModuleButton;
+    private javax.swing.JButton deleteModuleButton;
     private javax.swing.JTextField fname;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
@@ -490,19 +667,31 @@ public class GUI extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel7;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
+    private javax.swing.JPanel jPanel3;
+    private javax.swing.JPanel jPanel4;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JTabbedPane jTabbedPane2;
-    private javax.swing.JTabbedPane jTabbedPane3;
-    private javax.swing.JTabbedPane jTabbedPane4;
     private javax.swing.JTable jTable1;
+    private javax.swing.JTable jTable2;
+    private javax.swing.JTable jTable3;
     private javax.swing.JTextField lname;
     private javax.swing.JButton loadButton;
+    private javax.swing.JTextField moduleCodeField;
+    private javax.swing.JTextField moduleNameField;
+    private javax.swing.JButton moduleResetButton;
+    private javax.swing.JTextField moduleSearch;
+    private javax.swing.JButton moduleSearchButton;
+    private javax.swing.JScrollPane modulesTable;
     private javax.swing.JButton resetButton;
     private javax.swing.JTextField searchBar;
     private javax.swing.JButton searchButton;
     private javax.swing.JTextField studierichting;
     private javax.swing.JTextField studnr;
+    private javax.swing.JButton updateModuleButton;
     // End of variables declaration//GEN-END:variables
 }
