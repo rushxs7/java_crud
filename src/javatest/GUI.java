@@ -36,7 +36,9 @@ public class GUI extends javax.swing.JFrame {
         reloadModulesTable();
     }
     
-    
+    public String hostDatabase = "localhost/java";
+    public String username = "rushil";
+    public String password = "tokina01";
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -46,7 +48,7 @@ public class GUI extends javax.swing.JFrame {
     
     public void reloadTable() {
         try{
-            con = DriverManager.getConnection("jdbc:mysql://localhost/java", "rushil", "tokina01");
+            con = DriverManager.getConnection("jdbc:mysql://" + hostDatabase, username, password);
             String sql = "SELECT stud_nr AS 'Stud. Nr.', f_name AS 'Voornaam', l_name AS 'Achternaam', cohort as 'Cohort', studie_richting AS 'Studie Richting' FROM studenten";
             pst = con.prepareStatement(sql);
             rs = pst.executeQuery();
@@ -59,7 +61,7 @@ public class GUI extends javax.swing.JFrame {
     
     public void reloadModulesTable() {
         try{
-            con = DriverManager.getConnection("jdbc:mysql://localhost/java", "rushil", "tokina01");
+            con = DriverManager.getConnection("jdbc:mysql://" + hostDatabase, username, password);
             String sql = "SELECT id AS ID, module_code AS 'Module Code', module_name AS 'Module Name' FROM modules;";
             pst = con.prepareStatement(sql);
             rs = pst.executeQuery();
@@ -113,11 +115,19 @@ public class GUI extends javax.swing.JFrame {
         jLabel8 = new javax.swing.JLabel();
         moduleIdField = new javax.swing.JTextField();
         jPanel4 = new javax.swing.JPanel();
+        presentieCohortDropdown = new javax.swing.JComboBox<>();
+        presentieRichtingDropdown = new javax.swing.JComboBox<>();
+        jLabel9 = new javax.swing.JLabel();
+        jLabel10 = new javax.swing.JLabel();
+        loadPresenceButton = new javax.swing.JButton();
+        resetPresenceButton = new javax.swing.JButton();
         jScrollPane2 = new javax.swing.JScrollPane();
         jTable3 = new javax.swing.JTable();
+        savePresenceButton = new javax.swing.JButton();
+        jLabel11 = new javax.swing.JLabel();
+        jComboBox1 = new javax.swing.JComboBox<>();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setPreferredSize(new java.awt.Dimension(1000, 650));
 
         jLabel1.setText("Stud. Nr");
 
@@ -237,7 +247,7 @@ public class GUI extends javax.swing.JFrame {
                         .addComponent(searchBar)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(searchButton, javax.swing.GroupLayout.PREFERRED_SIZE, 78, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 575, Short.MAX_VALUE)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 577, Short.MAX_VALUE)
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addComponent(resetButton, javax.swing.GroupLayout.PREFERRED_SIZE, 101, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(0, 0, Short.MAX_VALUE)))
@@ -365,7 +375,7 @@ public class GUI extends javax.swing.JFrame {
                                     .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, 114, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 114, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 114, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addGap(0, 43, Short.MAX_VALUE)))
+                                .addGap(0, 44, Short.MAX_VALUE)))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jPanel3Layout.createSequentialGroup()
@@ -381,7 +391,7 @@ public class GUI extends javax.swing.JFrame {
                         .addComponent(moduleResetButton, javax.swing.GroupLayout.PREFERRED_SIZE, 92, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGap(18, 18, 18)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(modulesTable, javax.swing.GroupLayout.DEFAULT_SIZE, 525, Short.MAX_VALUE)
+                    .addComponent(modulesTable, javax.swing.GroupLayout.DEFAULT_SIZE, 526, Short.MAX_VALUE)
                     .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel3Layout.createSequentialGroup()
                         .addComponent(moduleSearch)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -429,26 +439,50 @@ public class GUI extends javax.swing.JFrame {
 
         jTabbedPane2.addTab("Modules", jPanel3);
 
+        presentieCohortDropdown.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+
+        presentieRichtingDropdown.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+
+        jLabel9.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+        jLabel9.setText("COHORT:");
+
+        jLabel10.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+        jLabel10.setText("Studie Richting:");
+
+        loadPresenceButton.setText("Load Table");
+
+        resetPresenceButton.setText("Reset Table");
+
         jTable3.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
+                { new Integer(1), "Rushil", "Ramautar", null, null, null, null, null, null, null, null}
             },
             new String [] {
-                "1", "Title 2", "Title 3", "Title 4"
+                "Stud. Nr.", "Voornaam", "Achternaam", "Week 1", "Week 2", "Week 3", "Week 4", "Week 5", "Week 6", "Week 7", "Week 8"
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.Boolean.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class
+                java.lang.Integer.class, java.lang.String.class, java.lang.String.class, java.lang.Boolean.class, java.lang.Boolean.class, java.lang.Boolean.class, java.lang.Boolean.class, java.lang.Boolean.class, java.lang.Boolean.class, java.lang.Boolean.class, java.lang.Boolean.class
             };
 
             public Class getColumnClass(int columnIndex) {
                 return types [columnIndex];
             }
         });
+        jTable3.getTableHeader().setReorderingAllowed(false);
         jScrollPane2.setViewportView(jTable3);
+
+        savePresenceButton.setText("Save");
+        savePresenceButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                savePresenceButtonActionPerformed(evt);
+            }
+        });
+
+        jLabel11.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+        jLabel11.setText("Module:");
+
+        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
 
         javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
         jPanel4.setLayout(jPanel4Layout);
@@ -456,15 +490,47 @@ public class GUI extends javax.swing.JFrame {
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel4Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(500, Short.MAX_VALUE))
+                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane2)
+                    .addGroup(jPanel4Layout.createSequentialGroup()
+                        .addComponent(jLabel9, javax.swing.GroupLayout.PREFERRED_SIZE, 68, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(presentieCohortDropdown, javax.swing.GroupLayout.PREFERRED_SIZE, 127, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jLabel10, javax.swing.GroupLayout.PREFERRED_SIZE, 124, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(presentieRichtingDropdown, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jLabel11, javax.swing.GroupLayout.PREFERRED_SIZE, 54, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jComboBox1, 0, 117, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(loadPresenceButton, javax.swing.GroupLayout.PREFERRED_SIZE, 125, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(resetPresenceButton, javax.swing.GroupLayout.PREFERRED_SIZE, 125, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel4Layout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(savePresenceButton)))
+                .addContainerGap())
         );
         jPanel4Layout.setVerticalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel4Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(142, Short.MAX_VALUE))
+                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(presentieCohortDropdown, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(presentieRichtingDropdown, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel9)
+                    .addComponent(jLabel10)
+                    .addComponent(loadPresenceButton)
+                    .addComponent(resetPresenceButton)
+                    .addComponent(jLabel11)
+                    .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 477, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(savePresenceButton)
+                .addContainerGap())
         );
 
         jTabbedPane2.addTab("Presentie", jPanel4);
@@ -510,7 +576,7 @@ public class GUI extends javax.swing.JFrame {
         String sql = "INSERT INTO `studenten`"
                 +"(f_name, l_name, cohort, studie_richting) "
                 +"VALUES (?,?,?,?)";
-        con = DriverManager.getConnection("jdbc:mysql://localhost/java", "rushil", "tokina01");
+        con = DriverManager.getConnection("jdbc:mysql://" + hostDatabase, username, password);
         pst = con.prepareStatement(sql);
         pst.setString(1, fname.getText());
         pst.setString(2, lname.getText());
@@ -533,7 +599,7 @@ public class GUI extends javax.swing.JFrame {
         // DELETE BUTTON
         try {
             String sqldelete = "DELETE FROM studenten WHERE stud_nr=?";
-            con = DriverManager.getConnection("jdbc:mysql://localhost/java", "rushil", "tokina01");
+            con = DriverManager.getConnection("jdbc:mysql://" + hostDatabase, username, password);
             pst = con.prepareStatement(sqldelete);
             pst.setString(1, studnr.getText());
             pst.executeUpdate();
@@ -553,7 +619,7 @@ public class GUI extends javax.swing.JFrame {
         // UPDATE BUTTON
         try {
             String sqlupdate = "UPDATE studenten SET f_name=?,l_name=?,cohort=?, studie_richting=? WHERE stud_nr=?";
-            con = DriverManager.getConnection("jdbc:mysql://localhost/java", "rushil", "tokina01");
+            con = DriverManager.getConnection("jdbc:mysql://" + hostDatabase, username, password);
             pst = con.prepareStatement(sqlupdate);
             pst.setInt(5, Integer.parseInt(studnr.getText()));
             pst.setString(1, fname.getText());
@@ -582,7 +648,7 @@ public class GUI extends javax.swing.JFrame {
         // SEARCH BUTTON
         try{
             String sqlsearch = "SELECT stud_nr AS 'Stud. Nr.', f_name AS 'Voornaam', l_name AS 'Achternaam', cohort as 'Cohort', studie_richting AS 'Studie Richting' FROM studenten WHERE stud_nr = ? OR f_name LIKE ? OR l_name LIKE ?";
-            con = DriverManager.getConnection("jdbc:mysql://localhost/java", "rushil", "tokina01");
+            con = DriverManager.getConnection("jdbc:mysql://" + hostDatabase, username, password);
             pst = con.prepareStatement(sqlsearch);
             pst.setString(1, searchBar.getText());
             pst.setString(2, "%" + searchBar.getText() + "%");
@@ -616,7 +682,7 @@ public class GUI extends javax.swing.JFrame {
         try {
             int pk = Integer.parseInt(studnr.getText());
             String loadInQuery = "SELECT stud_nr AS 'Stud. Nr.', f_name AS 'Voornaam', l_name AS 'Achternaam', cohort as 'Cohort', studie_richting AS 'Studie Richting' FROM studenten WHERE stud_nr=?";
-            con = DriverManager.getConnection("jdbc:mysql://localhost/java", "rushil", "tokina01");
+            con = DriverManager.getConnection("jdbc:mysql://" + hostDatabase, username, password);
             pst = con.prepareStatement(loadInQuery);
             pst.setInt(1, pk);
             rs = pst.executeQuery();
@@ -654,7 +720,7 @@ public class GUI extends javax.swing.JFrame {
             String sql = "INSERT INTO `modules`"
                     +"(module_code, module_name) "
                     +"VALUES (?,?)";
-            con = DriverManager.getConnection("jdbc:mysql://localhost/java", "rushil", "tokina01");
+            con = DriverManager.getConnection("jdbc:mysql://" + hostDatabase, username, password);
             pst = con.prepareStatement(sql);
             pst.setString(1, moduleCodeField.getText());
             pst.setString(2, moduleNameField.getText());
@@ -672,7 +738,7 @@ public class GUI extends javax.swing.JFrame {
         // DELETE MODULE BUTTON
         try {
             String sqldelete = "DELETE FROM modules WHERE id=?";
-            con = DriverManager.getConnection("jdbc:mysql://localhost/java", "rushil", "tokina01");
+            con = DriverManager.getConnection("jdbc:mysql://" + hostDatabase, username, password);
             pst = con.prepareStatement(sqldelete);
             pst.setString(1, moduleIdField.getText());
             pst.executeUpdate();
@@ -690,7 +756,7 @@ public class GUI extends javax.swing.JFrame {
         // UPDATE MODULE BUTTON
         try {
             String sqlupdate = "UPDATE modules SET module_code=?,module_name=? WHERE id=?";
-            con = DriverManager.getConnection("jdbc:mysql://localhost/java", "rushil", "tokina01");
+            con = DriverManager.getConnection("jdbc:mysql://" + hostDatabase, username, password);
             pst = con.prepareStatement(sqlupdate);
             pst.setString(3, moduleIdField.getText());
             pst.setString(1, moduleCodeField.getText());
@@ -712,7 +778,7 @@ public class GUI extends javax.swing.JFrame {
         try {
             int pk = Integer.parseInt(moduleIdField.getText());
             String loadInQuery = "SELECT id AS 'ID', module_code AS 'Module Code', module_name AS 'Module Name' FROM modules WHERE id=?";
-            con = DriverManager.getConnection("jdbc:mysql://localhost/java", "rushil", "tokina01");
+            con = DriverManager.getConnection("jdbc:mysql://" + hostDatabase, username, password);
             pst = con.prepareStatement(loadInQuery);
             pst.setInt(1, pk);
             rs = pst.executeQuery();
@@ -737,7 +803,7 @@ public class GUI extends javax.swing.JFrame {
         // SEARCH BUTTON
         try{
             String sqlsearch = "SELECT id AS 'ID', module_code AS 'Module Code', module_name AS 'Module Name' FROM modules WHERE id = ? OR module_code LIKE ? OR module_name LIKE ?";
-            con = DriverManager.getConnection("jdbc:mysql://localhost/java", "rushil", "tokina01");
+            con = DriverManager.getConnection("jdbc:mysql://" + hostDatabase, username, password);
             pst = con.prepareStatement(sqlsearch);
             pst.setString(1, moduleSearch.getText());
             pst.setString(2, "%" + moduleSearch.getText() + "%");
@@ -752,6 +818,10 @@ public class GUI extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(null, e);
         }
     }//GEN-LAST:event_moduleSearchButtonActionPerformed
+
+    private void savePresenceButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_savePresenceButtonActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_savePresenceButtonActionPerformed
 
     /**
      * @param args the command line arguments
@@ -796,7 +866,10 @@ public class GUI extends javax.swing.JFrame {
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
+    private javax.swing.JComboBox<String> jComboBox1;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel10;
+    private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
@@ -804,6 +877,7 @@ public class GUI extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
+    private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
@@ -817,6 +891,7 @@ public class GUI extends javax.swing.JFrame {
     private javax.swing.JTextField lname;
     private javax.swing.JButton loadButton;
     private javax.swing.JButton loadInButton;
+    private javax.swing.JButton loadPresenceButton;
     private javax.swing.JTextField moduleCodeField;
     private javax.swing.JTextField moduleIdField;
     private javax.swing.JTextField moduleNameField;
@@ -824,7 +899,11 @@ public class GUI extends javax.swing.JFrame {
     private javax.swing.JTextField moduleSearch;
     private javax.swing.JButton moduleSearchButton;
     private javax.swing.JScrollPane modulesTable;
+    private javax.swing.JComboBox<String> presentieCohortDropdown;
+    private javax.swing.JComboBox<String> presentieRichtingDropdown;
     private javax.swing.JButton resetButton;
+    private javax.swing.JButton resetPresenceButton;
+    private javax.swing.JButton savePresenceButton;
     private javax.swing.JTextField searchBar;
     private javax.swing.JButton searchButton;
     private javax.swing.JTextField studierichting;
