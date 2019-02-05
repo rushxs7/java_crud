@@ -36,7 +36,7 @@ public class GUI extends javax.swing.JFrame {
         reloadModulesTable();
     }
     
-    public String hostDatabase = "localhost/java";
+    public String hostDatabase = "192.168.1.15/java";
     public String username = "rushil";
     public String password = "tokina01";
 
