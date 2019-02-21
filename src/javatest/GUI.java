@@ -891,10 +891,22 @@ public class GUI extends javax.swing.JFrame {
             rs = pst.executeQuery();
 //            jTable3.setModel(DbUtils.resultSetToTableModel(rs));
 //            System.out.println(rs);
-            jTable3.setModel(DbUtils.);
+            DefaultTableModel model = new DefaultTableModel();
             ResultSetMetaData rsmd = rs.getMetaData();
             
             // Make Column Names
+            model.addColumn("Stud. Nr.");
+            model.addColumn("Voornaam");
+            model.addColumn("Achternaam");
+            model.addColumn("Week 1");
+            model.addColumn("Week 2");
+            model.addColumn("Week 3");
+            model.addColumn("Week 4");
+            model.addColumn("Week 5");
+            model.addColumn("Week 6");
+            model.addColumn("Week 7");
+            model.addColumn("Week 8");
+            
             
             
             while (rs.next()){
@@ -903,7 +915,7 @@ public class GUI extends javax.swing.JFrame {
                     if(col < 3){
                         data[col] = rs.getString(col + 1);
                     }else{
-                        data[col] = Boolean.FALSE;
+                        data[col] = Boolean.parseBoolean(rs.getString(col + 1));
                     }
 //                    System.out.println(rs.getString(col + 1));
                 }
