@@ -14,10 +14,12 @@ import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
+import javax.swing.table.AbstractTableModel;
 import javax.swing.table.DefaultTableModel;
 import net.proteanit.sql.DbUtils;
 
@@ -887,7 +889,27 @@ public class GUI extends javax.swing.JFrame {
             pst.setInt(1, Integer.parseInt(cohortCBB));
             pst.setString(2, studCBB);
             rs = pst.executeQuery();
-            jTable3.setModel(DbUtils.resultSetToTableModel(rs));
+//            jTable3.setModel(DbUtils.resultSetToTableModel(rs));
+//            System.out.println(rs);
+            jTable3.setModel(DbUtils.);
+            ResultSetMetaData rsmd = rs.getMetaData();
+            
+            // Make Column Names
+            
+            
+            while (rs.next()){
+                Object[] data = new Object[11];
+                for (int col = 0;col < rsmd.getColumnCount(); col++){
+                    if(col < 3){
+                        data[col] = rs.getString(col + 1);
+                    }else{
+                        data[col] = Boolean.FALSE;
+                    }
+//                    System.out.println(rs.getString(col + 1));
+                }
+                model.addRow(data);
+            }
+            jTable3.setModel(model);
         }catch(Exception ex){
             JOptionPane.showMessageDialog(null, ex);
         }
